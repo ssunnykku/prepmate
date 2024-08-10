@@ -1,0 +1,22 @@
+const Palette = {
+    Primary: '#5C7CFA',
+    Secondary: '#91A7FF',
+    Tertiary: '#DBE4FF',
+    Error: '#FF4D4F',
+    Warning: '#FAAD14',
+    Success: '#52C41A',
+    TextPrimary: '#333333',
+    TextSecondary: '#969696',
+    TextTertiary: '#D9D9D9',
+    BodyPrimary: '#FFFFFF',
+    BodySecondary: '#F5F5F4',
+    InputBorder: '#C9D3DB',
+    ModalBorder: '#CFCFCF',
+    HashTagYellowGreen: '#e6f9ea',
+    HashTagGreen: '#1fb881',
+    TabBorderBottom: '#e7e7e7',
+    Divider: '#bbbbbb',
+    ShadowBody: '2px 4px 10px 0 rgba(231,233,242,0.7)',
+    Cancel: '#F4F4F4',
+};
+export default Palette;
