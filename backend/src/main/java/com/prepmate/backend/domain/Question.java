@@ -24,8 +24,7 @@ import java.util.List;
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Question {
-
-    public Question(String question, String answer) {
+    public void update(String question, String answer) {
         this.question = question;
         this.answer = answer;
     }
@@ -49,7 +48,7 @@ public class Question {
     private LocalDateTime createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "category")
-    private Category category;
+    @JoinColumn(name = "interview")
+    private Interview interview;
 
 }
