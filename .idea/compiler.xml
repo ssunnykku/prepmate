@@ -27,7 +27,7 @@
         <module name="backend.main" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
+    <bytecodeTargetLevel target="17">
       <module name="prepmate" target="17" />
       <module name="prepmate.main" target="17" />
       <module name="prepmate.test" target="17" />
