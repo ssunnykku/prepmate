@@ -4,6 +4,7 @@ import com.prepmate.backend.domain.Interview;
 import com.prepmate.backend.domain.Question;
 import com.prepmate.backend.domain.User;
 import com.prepmate.backend.dto.QuestionDTO;
+import com.prepmate.backend.dto.QuestionReqDTO;
 import com.prepmate.backend.repository.InterviewRepository;
 import com.prepmate.backend.repository.QuestionRepository;
 import com.prepmate.backend.repository.UserRepository;
@@ -81,15 +82,13 @@ class QuestionServiceTest {
     void addQuestionTest() {
         // given
         Question question = question();
-        QuestionDTO questionDTO = QuestionDTO.builder()
-                .id(question.getId())
+        QuestionReqDTO questionReqDTO = QuestionReqDTO.builder()
                 .question(question.getQuestion())
                 .answer(question.getAnswer())
-                .createdAt(question.getCreatedAt())
                 .interviewId(question.getInterview().getId())
                 .build();
         // when
-        questionService.addQuestion(questionDTO);
+        questionService.addQuestion(questionReqDTO);
 
         // then
         List<Question> list = questionRepository.findAll();
@@ -105,7 +104,7 @@ class QuestionServiceTest {
     void addQuestion_exceptionTest() {
 
         // given
-        QuestionDTO question = QuestionDTO.builder()
+        QuestionReqDTO question = QuestionReqDTO.builder()
                 .question("spring이란?")
                 .answer("java Application 환경 제공, java bean 개발 환경 제공, bean 간의 관계를 정의하며 DI를 제공하는 프레임워크")
                 .interviewId(1L)
@@ -148,13 +147,12 @@ class QuestionServiceTest {
         Question question = question();
         questionRepository.save(question);
 
-        QuestionDTO editData = QuestionDTO.builder()
-                .id(question.getId())
+        QuestionReqDTO editData = QuestionReqDTO.builder()
                 .question("spring boot란?")
                 .answer("java Application 환경 제공, java bean 개발 환경 제공, bean 간의 관계를 정의하며 DI를 제공하는 프레임워크, 엄청 편합니다. tomcat을 내장")
                 .build();
         // when
-        questionService.setQuestion(editData);
+        questionService.setQuestion(question.getId(), editData);
         // then
         Optional<Question> getData = questionRepository.findById(question.getId());
 

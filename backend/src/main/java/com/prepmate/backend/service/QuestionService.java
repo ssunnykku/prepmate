@@ -3,6 +3,7 @@ package com.prepmate.backend.service;
 import com.prepmate.backend.domain.Interview;
 import com.prepmate.backend.domain.Question;
 import com.prepmate.backend.dto.QuestionDTO;
+import com.prepmate.backend.dto.QuestionReqDTO;
 import com.prepmate.backend.repository.InterviewRepository;
 import com.prepmate.backend.repository.QuestionRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -21,13 +22,13 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
     private final InterviewRepository interviewRepository;
 
-    public void addQuestion(QuestionDTO questionDTO) {
-        Interview interview = interviewRepository.findById(questionDTO.getInterviewId())
-                .orElseThrow(() -> new EntityNotFoundException("Interview not found with id: " + questionDTO.getInterviewId()));
+    public void addQuestion(QuestionReqDTO questionReqDTO) {
+        Interview interview = interviewRepository.findById(questionReqDTO.getInterviewId())
+                .orElseThrow(() -> new EntityNotFoundException("Interview not found with id: " + questionReqDTO.getInterviewId()));
 
         questionRepository.save(Question.builder()
-                .question(questionDTO.getQuestion())
-                .answer(questionDTO.getAnswer())
+                .question(questionReqDTO.getQuestion())
+                .answer(questionReqDTO.getAnswer())
                 .interview(interview)
                 .build());
 
@@ -48,11 +49,11 @@ public class QuestionService {
       return question;
     }
 
-    public void setQuestion(QuestionDTO questionDTO) {
-        Question data = questionRepository.findById(questionDTO.getId())
-                .orElseThrow(() -> new EntityNotFoundException("Question not found with id: " + questionDTO.getId()));
+    public void setQuestion(Long questionId, QuestionReqDTO questionReqDTO) {
+        Question data = questionRepository.findById(questionId)
+                .orElseThrow(() -> new EntityNotFoundException("Question not found with id: " + questionId));
 
-        data.update(questionDTO.getQuestion(),questionDTO.getAnswer());
+        data.update(questionReqDTO.getQuestion(),questionReqDTO.getAnswer());
 
         questionRepository.save(data);
         }
