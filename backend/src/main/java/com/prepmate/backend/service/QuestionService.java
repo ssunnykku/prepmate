@@ -9,6 +9,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,51 +22,55 @@ public class QuestionService {
     private final InterviewRepository interviewRepository;
 
     public void addQuestion(QuestionDTO questionDTO) {
-        Optional<Interview> interview = interviewRepository.findById(questionDTO.getInterviewId());
+        Interview interview = interviewRepository.findById(questionDTO.getInterviewId())
+                .orElseThrow(() -> new EntityNotFoundException("Interview not found with id: " + questionDTO.getInterviewId()));
 
-        interview.ifPresentOrElse(data -> {
-            questionRepository.save(Question.builder()
-                    .question(questionDTO.getQuestion())
-                    .answer(questionDTO.getAnswer())
-                    .interview(data)
-                    .build());
-        }, () -> {
-            throw new IllegalArgumentException("Interview not found");
-        });
+        questionRepository.save(Question.builder()
+                .question(questionDTO.getQuestion())
+                .answer(questionDTO.getAnswer())
+                .interview(interview)
+                .build());
 
     }
     public QuestionDTO getQuestion(Long questionId) {
 
-       Optional<Question> data = questionRepository.findById(questionId);
-        data.orElseThrow(() -> new EntityNotFoundException("Question not found with id: " + questionId));
+        Question data = questionRepository.findById(questionId)
+               .orElseThrow(() -> new EntityNotFoundException("Question not found with id: " + questionId));
 
-        QuestionDTO question = null;
-
-       if(data.isPresent()) {
-           question = QuestionDTO.builder()
-                   .id(data.get().getId())
-                   .question(data.get().getQuestion())
-                   .answer(data.get().getAnswer())
-                   .createdAt(data.get().getCreatedAt())
+        QuestionDTO question = QuestionDTO.builder()
+                   .id(data.getId())
+                   .question(data.getQuestion())
+                   .answer(data.getAnswer())
+                   .createdAt(data.getCreatedAt())
                    .build();
-       }
+
 
       return question;
     }
 
     public void setQuestion(QuestionDTO questionDTO) {
-        Optional<Question> data = questionRepository.findById(questionDTO.getId());
+        Question data = questionRepository.findById(questionDTO.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Question not found with id: " + questionDTO.getId()));
 
-        data.ifPresentOrElse((q)->{
-            Question inquiry = data.get();
-            inquiry.update(questionDTO.getQuestion(),questionDTO.getAnswer());
+        data.update(questionDTO.getQuestion(),questionDTO.getAnswer());
 
-            questionRepository.save(inquiry);
-        }, ()-> new EntityNotFoundException("Question not found with id: " + questionDTO.getId()));
-    }
+        questionRepository.save(data);
+        }
 
-    public List<Question> getQuestionList() {
-        return questionRepository.findAll();
+    public List<QuestionDTO> getQuestionList() {
+        List<Question> questions = questionRepository.findAll();
+        List<QuestionDTO> result = new ArrayList<>();
+
+        for (Question question: questions) {
+            result.add(QuestionDTO.builder()
+                            .id(question.getId())
+                            .question(question.getQuestion())
+                            .answer(question.getAnswer())
+                            .createdAt(question.getCreatedAt())
+                            .interviewId(question.getInterview().getId())
+                    .build());
+        }
+        return result;
     }
 
     public void removeQuestion(Long questionId) {

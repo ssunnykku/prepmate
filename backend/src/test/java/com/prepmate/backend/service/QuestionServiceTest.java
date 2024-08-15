@@ -20,7 +20,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -38,7 +37,7 @@ class QuestionServiceTest {
     @Autowired
     InterviewRepository interviewRepository;
 
-    static User user;
+     private User user;
 
     @BeforeEach
     void beforeEach() {
@@ -59,7 +58,6 @@ class QuestionServiceTest {
     }
 
     private Question question() {
-
         Interview interview =
                 Interview.builder()
                         .interviewName("백엔드 개발자 면접 연습1")
@@ -115,11 +113,9 @@ class QuestionServiceTest {
 
         // then
         assertThatThrownBy(()->questionService.addQuestion(question))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Interview not found");
-
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessage("Interview not found with id: " + question.getInterviewId());
     }
-
 
     @Test
     @Transactional
@@ -179,7 +175,7 @@ class QuestionServiceTest {
         }
 
         // when
-        List<Question> list = questionService.getQuestionList();
+        List<QuestionDTO> list = questionService.getQuestionList();
 
         // then
         assertThat(list.size()).isEqualTo(10);
