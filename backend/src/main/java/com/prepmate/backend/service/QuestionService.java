@@ -31,7 +31,6 @@ public class QuestionService {
                 .answer(questionReqDTO.getAnswer())
                 .interview(interview)
                 .build());
-
     }
     public QuestionDTO getQuestion(Long questionId) {
 
@@ -56,7 +55,7 @@ public class QuestionService {
         data.update(questionReqDTO.getQuestion(),questionReqDTO.getAnswer());
 
         questionRepository.save(data);
-        }
+    }
 
     public List<QuestionDTO> getQuestionList() {
         List<Question> questions = questionRepository.findAll();
