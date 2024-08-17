@@ -22,15 +22,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class Category {
+public class Interview {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "category_id", nullable = false)
+    @Column(name = "interview_id", nullable = false)
     private Long id;
 
-    @Column(name = "category_name", nullable = false)
+    @Column(name = "interview_name", nullable = false)
     @Size(max = 200)
-    private String categoryName;
+    private String interviewName;
 
     @Column(name = "description", nullable = false)
     @Size(max = 600)
@@ -45,7 +45,7 @@ public class Category {
     @NotNull
     private User user;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "interview")
     @Builder.Default
     List<Question> questions = new ArrayList<>();
 }
