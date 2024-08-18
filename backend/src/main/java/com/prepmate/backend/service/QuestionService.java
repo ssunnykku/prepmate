@@ -12,8 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -23,14 +21,14 @@ public class QuestionService {
     private final InterviewRepository interviewRepository;
 
     public void addQuestion(QuestionReqDTO questionReqDTO) {
-        Interview interview = interviewRepository.findById(questionReqDTO.getInterviewId())
-                .orElseThrow(() -> new EntityNotFoundException("Interview not found with id: " + questionReqDTO.getInterviewId()));
+            Interview interview = interviewRepository.findById(questionReqDTO.getInterviewId())
+                    .orElseThrow(() -> new EntityNotFoundException("Interview not found with id: " + questionReqDTO.getInterviewId()));
 
-        questionRepository.save(Question.builder()
-                .question(questionReqDTO.getQuestion())
-                .answer(questionReqDTO.getAnswer())
-                .interview(interview)
-                .build());
+            questionRepository.save(Question.builder()
+                    .question(questionReqDTO.getQuestion())
+                    .answer(questionReqDTO.getAnswer())
+                    .interview(interview)
+                    .build());
     }
     public QuestionDTO getQuestion(Long questionId) {
 

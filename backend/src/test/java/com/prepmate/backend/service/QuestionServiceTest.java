@@ -101,6 +101,7 @@ class QuestionServiceTest {
 
     @Test
     @Transactional
+    @DisplayName("interviewId로 Interview 찾을 수 없을 때")
     void addQuestion_exceptionTest() {
 
         // given

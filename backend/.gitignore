@@ -81,7 +81,7 @@ out/
 # .idea/artifacts
 # .idea/compiler.xml
 # .idea/jarRepositories.xml
-# .idea/modules.xml
+ .idea/modules.xml
 # .idea/*.iml
 # .idea/modules
 # *.iml
@@ -128,7 +128,7 @@ fabric.properties
 
 # *.iml
 # modules.xml
-# .idea/misc.xml
+ .idea/misc.xml
 # *.ipr
 
 # Sonarlint plugin

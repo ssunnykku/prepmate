@@ -23,6 +23,10 @@ import java.util.List;
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Interview {
+    public void update(String interviewName, String description) {
+        this.interviewName = interviewName;
+        this.description = description;
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "interview_id", nullable = false)
