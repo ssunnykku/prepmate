@@ -20,6 +20,10 @@ public class InterviewService {
     private final InterviewRepository interviewRepository;
     private final UserRepository userRepository;
 
+    /**
+     * 인터뷰 추가
+     * @param interviewReqDTO 인터뷰 추가시 입력 정보 (interviewName, description, userId)
+     */
     public void addInterview(InterviewReqDTO interviewReqDTO) {
         User user = userRepository.findByUserId(interviewReqDTO.getUserId());
 
@@ -30,6 +34,11 @@ public class InterviewService {
                 .build());
     }
 
+    /**
+     * 인터뷰 수정
+     * @param interviewId
+     * @param interviewReqDTO
+     */
     public void setInterview(Long interviewId, InterviewReqDTO interviewReqDTO) {
         Interview data = interviewRepository.findById(interviewId)
                 .orElseThrow(() -> new EntityNotFoundException("Interview not found with id: " + interviewId));
@@ -39,10 +48,18 @@ public class InterviewService {
         interviewRepository.save(data);
     }
 
+    /**
+     * 인터뷰 삭제
+     * @param interviewId
+     */
     public void removeInterview(Long interviewId) {
         interviewRepository.deleteById(interviewId);
     }
 
+    /**
+     * 인터뷰 리스트
+     * @return InterviewDTO 리스트 반환
+     */
     public List<InterviewDTO> getInterviewList(){
         List<Interview> dataList = interviewRepository.findAll();
         List<InterviewDTO> result = new ArrayList<>();
