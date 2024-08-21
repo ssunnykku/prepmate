@@ -34,6 +34,7 @@ public class Interview {
 
     @Column(name = "interview_name", nullable = false)
     @Size(max = 200)
+    @NotBlank
     private String interviewName;
 
     @Column(name = "description", nullable = false)
