@@ -1,5 +1,5 @@
 ---
-name: "[feat] 이슈를 입력해주세요"
+name: "create issue"
 about: Describe this issue template's purpose here.
 title: ''
 labels: ''
