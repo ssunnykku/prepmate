@@ -19,22 +19,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
@@ -130,22 +124,7 @@ class QuestionControllerTest {
         Long interviewId = 1L;
         Long questionId = 1L;
 
-        QuestionReqDTO question = QuestionReqDTO.builder()
-                .question("spring이란?")
-                .answer("java Application 환경 제공, java bean 개발 환경 제공, bean 간의 관계를 정의하며 DI를 제공하는 프레임워크")
-                .interviewId(interviewId)
-                .build();
-
         QuestionReqDTO editQuestion = QuestionReqDTO.builder()
-                .question("spring boot란?")
-                .answer("java Application 환경 제공, java bean 개발 환경 제공, bean 간의 관계를 정의하며 DI를 제공하는 프레임워크, tomcat 내장")
-                .interviewId(interviewId)
-                .build();
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
-
-        QuestionDTO response = QuestionDTO.builder()
-                .id(questionId)
                 .question("spring boot란?")
                 .answer("java Application 환경 제공, java bean 개발 환경 제공, bean 간의 관계를 정의하며 DI를 제공하는 프레임워크, tomcat 내장")
                 .interviewId(interviewId)
@@ -154,10 +133,12 @@ class QuestionControllerTest {
         //when
         mockMvc.perform(MockMvcRequestBuilders.put("/questions/{questionId}", questionId)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(response))
+                        .content(objectMapper.writeValueAsString(editQuestion))
                 )
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(print());
+
+        BDDMockito.verify(questionService).setQuestion(interviewId, editQuestion);
 
     }
 
@@ -211,12 +192,6 @@ class QuestionControllerTest {
         Long interviewId = 1L;
         Long questionId = 1L;
 
-        QuestionDTO data = QuestionDTO.builder()
-                .id(questionId)
-                .question("spring boot란?")
-                .answer("java Application 환경 제공, java bean 개발 환경 제공, bean 간의 관계를 정의하며 DI를 제공하는 프레임워크, tomcat 내장")
-                .interviewId(interviewId)
-                .build();
 
         //when
         mockMvc.perform(MockMvcRequestBuilders.delete("/questions/{questionId}", questionId)
