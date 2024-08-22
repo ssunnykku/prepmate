@@ -4,10 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -18,7 +15,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name="users")
-@Data
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -48,7 +45,4 @@ public class User {
     @CreatedDate
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "user")
-    @Builder.Default
-    List<Interview> interviews = new ArrayList<>();
 }
