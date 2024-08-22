@@ -19,6 +19,4 @@ public class InterviewDTO {
     private String description;
     private LocalDateTime createdAt;
     private UserDTO user;
-    List<QuestionDTO> questions = new ArrayList<>();
-
 }
