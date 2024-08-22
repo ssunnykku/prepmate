@@ -3,6 +3,7 @@ package com.prepmate.backend.repository;
 import com.prepmate.backend.domain.Interview;
 import com.prepmate.backend.domain.Question;
 import com.prepmate.backend.domain.User;
+import com.prepmate.backend.dto.QuestionDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,8 +87,7 @@ class QuestionRepositoryTest {
         Optional<Question> result = questionRepository.findById(question.getId());
 
         result.ifPresent(data -> {
-            data.setQuestion("spring boot란?");
-            data.setAnswer("java Application 환경 제공, java bean 개발 환경 제공, bean 간의 관계를 정의하며 DI를 제공하는 프레임워크, 엄청 편합니다. tomcat을 내장");
+            data.update("spring boot란?","java Application 환경 제공, java bean 개발 환경 제공, bean 간의 관계를 정의하며 DI를 제공하는 프레임워크, 엄청 편합니다. tomcat을 내장");
 
             assertThat(data.getQuestion()).contains("boot");
             assertThat(data.getAnswer()).contains("tomcat");
@@ -120,4 +120,5 @@ class QuestionRepositoryTest {
         });
     }
 
-}
+
+    }
