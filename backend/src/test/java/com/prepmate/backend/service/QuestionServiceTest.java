@@ -165,23 +165,6 @@ class QuestionServiceTest {
 
     @Test
     @Transactional
-    @DisplayName("질문-답변 리스트")
-    void getQuestionList() {
-        // given
-        for (int i = 0; i < 10; i++) {
-            Question question = question();
-            questionRepository.save(question);
-        }
-
-        // when
-        List<QuestionDTO> list = questionService.getQuestionList();
-
-        // then
-        assertThat(list.size()).isEqualTo(10);
-    }
-
-    @Test
-    @Transactional
     @DisplayName("질문+답변 삭제")
     void removeTest() {
         // given

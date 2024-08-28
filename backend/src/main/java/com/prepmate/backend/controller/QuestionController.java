@@ -10,15 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/questions")
 @Slf4j
 public class QuestionController {
-
     private final QuestionService questionService;
 
     /**
@@ -55,15 +51,6 @@ public class QuestionController {
     }
 
     /**
-     * 문제 리스트 전체 조회 -> 특정 인터뷰에 대한 리스트 조회로 수정 필요
-     * @return QuestionDTO 리스트 반환
-     */
-    @GetMapping
-    public ResponseEntity<List<QuestionDTO>> getQuestionList() {
-        return ResponseEntity.status(HttpStatus.OK).body(questionService.getQuestionList());
-    }
-
-    /**
      * 문제 삭제
      * @param questionId
      * @return 요청 결과 반환 (성공시 "success")
@@ -73,6 +60,5 @@ public class QuestionController {
         questionService.removeQuestion(questionId);
         return ResponseEntity.status(HttpStatus.OK).body("success");
     }
-
 
 }

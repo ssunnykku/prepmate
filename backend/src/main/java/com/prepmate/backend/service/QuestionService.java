@@ -10,13 +10,9 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class QuestionService {
-
     private final QuestionRepository questionRepository;
     private final InterviewRepository interviewRepository;
 
@@ -67,26 +63,6 @@ public class QuestionService {
         data.update(questionReqDTO.getQuestion(),questionReqDTO.getAnswer());
 
         questionRepository.save(data);
-    }
-
-    /**
-     * 문제 리스트 조회
-     * @return QuestionDTO 리스트 반환
-     */
-    public List<QuestionDTO> getQuestionList() {
-        List<Question> questions = questionRepository.findAll();
-        List<QuestionDTO> result = new ArrayList<>();
-
-        for (Question question: questions) {
-            result.add(QuestionDTO.builder()
-                            .id(question.getId())
-                            .question(question.getQuestion())
-                            .answer(question.getAnswer())
-                            .createdAt(question.getCreatedAt())
-                            .interviewId(question.getInterview().getId())
-                    .build());
-        }
-        return result;
     }
 
     /**

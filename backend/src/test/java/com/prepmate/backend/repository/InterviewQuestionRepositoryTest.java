@@ -3,19 +3,16 @@ package com.prepmate.backend.repository;
 import com.prepmate.backend.domain.Interview;
 import com.prepmate.backend.domain.Question;
 import com.prepmate.backend.domain.User;
-import com.prepmate.backend.dto.QuestionDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.stereotype.Repository;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -61,8 +58,8 @@ class InterviewQuestionRepositoryTest {
         questionRepository.save(question1);
         questionRepository.save(question2);
 
-       List<QuestionDTO> data = interviewQuestionRepository.findByInterviewId(interview.getId());
-        assertThat(data.get(0).getInterviewId()).isEqualTo(interview.getId());
+       List<Question> data = interviewQuestionRepository.findByInterviewId(interview.getId());
+        assertThat(data.get(0).getInterview().getId()).isEqualTo(interview.getId());
         assertThat(data.get(0).getQuestion()).isEqualTo(question1.getQuestion());
         assertThat(data.get(1).getQuestion()).isEqualTo(question2.getQuestion());
         assertThat(data.get(0).getAnswer()).isEqualTo(question1.getAnswer());
