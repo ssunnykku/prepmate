@@ -17,9 +17,11 @@ public class InterviewReqDTO {
     @Size(max = 200)
     @NotBlank
     private String interviewName;
+
     @Size(max = 600)
     @NotBlank
     private String description;
+
     @NotNull(message = "userId must not be null")
     private UUID userId;
 

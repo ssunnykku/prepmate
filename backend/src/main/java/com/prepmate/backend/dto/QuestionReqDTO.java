@@ -16,9 +16,12 @@ public class QuestionReqDTO {
     @Size(max = 600)
     @NotBlank
     private String question;
+
     @Size(max = 3000)
     @NotBlank
     private String answer;
+
     @NotNull(message = "interviewId must not be null")
     private Long interviewId;
+
 }
