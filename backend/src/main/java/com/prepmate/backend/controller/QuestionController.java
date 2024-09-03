@@ -17,7 +17,6 @@ import java.util.List;
 @RequestMapping("/questions")
 @Slf4j
 public class QuestionController {
-
     private final QuestionService questionService;
 
     /**
@@ -72,6 +71,5 @@ public class QuestionController {
         questionService.removeQuestion(questionId);
         return ResponseEntity.status(HttpStatus.OK).body("success");
     }
-
 
 }

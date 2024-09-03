@@ -17,7 +17,6 @@ import java.util.List;
 @RequestMapping("/interviews")
 @Slf4j
 public class InterviewController {
-
     private final InterviewService interviewService;
 
     /**
