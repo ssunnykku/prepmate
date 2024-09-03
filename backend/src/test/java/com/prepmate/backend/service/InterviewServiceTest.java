@@ -2,8 +2,7 @@ package com.prepmate.backend.service;
 
 import com.prepmate.backend.domain.Interview;
 import com.prepmate.backend.domain.User;
-import com.prepmate.backend.dto.InterviewDTO;
-import com.prepmate.backend.dto.InterviewReqDTO;
+import com.prepmate.backend.dto.InterviewRequest;
 import com.prepmate.backend.repository.InterviewRepository;
 import com.prepmate.backend.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -12,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -38,8 +36,8 @@ class InterviewServiceTest {
                 .password("1234").build();
         userRepository.save(user);
 
-        InterviewReqDTO interview =
-                InterviewReqDTO.builder()
+        InterviewRequest interview =
+                InterviewRequest.builder()
                         .interviewName("백엔드 개발자 면접 연습1")
                         .description("백엔드 개발자 면접 연습(java)")
                         .userId(user.getUserId())
@@ -70,8 +68,8 @@ class InterviewServiceTest {
                         .build();
         interviewRepository.save(interview);
 
-        InterviewReqDTO editInterview =
-                InterviewReqDTO.builder()
+        InterviewRequest editInterview =
+                InterviewRequest.builder()
                         .interviewName("프론트엔드 개발자 면접 연습")
                         .description("프론트엔드 개발자 면접 연습(javaScript)")
                         .build();
@@ -139,7 +137,7 @@ class InterviewServiceTest {
         interviewRepository.save(interview2);
 
         // when
-        List<InterviewDTO> interviewList= interviewService.getInterviewList();
+        List<Interview> interviewList= interviewService.getInterviewList();
 
         // then
         assertThat(interviewList.size()).isEqualTo(2);

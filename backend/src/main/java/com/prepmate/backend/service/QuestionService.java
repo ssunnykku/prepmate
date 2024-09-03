@@ -2,15 +2,13 @@ package com.prepmate.backend.service;
 
 import com.prepmate.backend.domain.Interview;
 import com.prepmate.backend.domain.Question;
-import com.prepmate.backend.dto.QuestionDTO;
-import com.prepmate.backend.dto.QuestionReqDTO;
+import com.prepmate.backend.dto.QuestionRequest;
 import com.prepmate.backend.repository.InterviewRepository;
 import com.prepmate.backend.repository.QuestionRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,7 +21,7 @@ public class QuestionService {
      * 문제 추가
      * @param questionReqDTO 문제 추가시 입력 내용(question, answer, interviewId)
      */
-    public void addQuestion(QuestionReqDTO questionReqDTO) {
+    public void addQuestion(QuestionRequest questionReqDTO) {
             Interview interview = interviewRepository.findById(questionReqDTO.getInterviewId())
                     .orElseThrow(() -> new EntityNotFoundException("Interview not found with id: " + questionReqDTO.getInterviewId()));
 
@@ -39,19 +37,10 @@ public class QuestionService {
      * @param questionId
      * @return QuestionDTO
      */
-    public QuestionDTO getQuestion(Long questionId) {
-
+    public Question getQuestion(Long questionId) {
         Question data = questionRepository.findById(questionId)
                .orElseThrow(() -> new EntityNotFoundException("Question not found with id: " + questionId));
-
-        QuestionDTO question = QuestionDTO.builder()
-                   .id(data.getId())
-                   .question(data.getQuestion())
-                   .answer(data.getAnswer())
-                   .createdAt(data.getCreatedAt())
-                   .build();
-
-      return question;
+      return data;
     }
 
     /**
@@ -59,7 +48,7 @@ public class QuestionService {
      * @param questionId
      * @param questionReqDTO 문제 수정시 입력 내용(question, answer)
      */
-    public void setQuestion(Long questionId, QuestionReqDTO questionReqDTO) {
+    public void setQuestion(Long questionId, QuestionRequest questionReqDTO) {
         Question data = questionRepository.findById(questionId)
                 .orElseThrow(() -> new EntityNotFoundException("Question not found with id: " + questionId));
 
@@ -72,20 +61,8 @@ public class QuestionService {
      * 문제 리스트 조회
      * @return QuestionDTO 리스트 반환
      */
-    public List<QuestionDTO> getQuestionList() {
-        List<Question> questions = questionRepository.findAll();
-        List<QuestionDTO> result = new ArrayList<>();
-
-        for (Question question: questions) {
-            result.add(QuestionDTO.builder()
-                            .id(question.getId())
-                            .question(question.getQuestion())
-                            .answer(question.getAnswer())
-                            .createdAt(question.getCreatedAt())
-                            .interviewId(question.getInterview().getId())
-                    .build());
-        }
-        return result;
+    public List<Question> getQuestionList() {
+        return questionRepository.findAll();
     }
 
     /**

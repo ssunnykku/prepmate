@@ -1,14 +1,11 @@
 package com.prepmate.backend.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prepmate.backend.domain.Interview;
 import com.prepmate.backend.domain.Question;
-import com.prepmate.backend.domain.User;
-import com.prepmate.backend.dto.QuestionDTO;
-import com.prepmate.backend.dto.QuestionReqDTO;
+import com.prepmate.backend.dto.QuestionResponse;
+import com.prepmate.backend.dto.QuestionRequest;
 import com.prepmate.backend.service.QuestionService;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,7 +51,7 @@ class QuestionControllerTest {
     @Test
     void addQuestion() throws Exception {
         Long interviewId = 1L;
-        QuestionReqDTO question = QuestionReqDTO.builder()
+        QuestionRequest question = QuestionRequest.builder()
                 .question("spring이란?")
                 .answer("java Application 환경 제공, java bean 개발 환경 제공, bean 간의 관계를 정의하며 DI를 제공하는 프레임워크")
                 .interviewId(interviewId)
@@ -71,7 +68,7 @@ class QuestionControllerTest {
     @Test
     void addQuestion_exceptionTest() throws Exception {
         Long interviewId = 1L;
-        QuestionReqDTO question = QuestionReqDTO.builder()
+        QuestionRequest question = QuestionRequest.builder()
                 .question("")
                 .answer("java Application 환경 제공, java bean 개발 환경 제공, bean 간의 관계를 정의하며 DI를 제공하는 프레임워크")
                 .interviewId(interviewId)
@@ -94,7 +91,15 @@ class QuestionControllerTest {
         Long questionId = 1L;
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
-        QuestionDTO question = QuestionDTO.builder()
+
+        Question data = Question.builder()
+                .id(questionId)
+                .question("spring이란?")
+                .answer("java Application 환경 제공, java bean 개발 환경 제공, bean 간의 관계를 정의하며 DI를 제공하는 프레임워크")
+                .createdAt(LocalDateTime.parse("2024-08-15 13:47:13.248",formatter))
+                .build();
+
+        QuestionResponse question = QuestionResponse.builder()
                 .id(questionId)
                 .question("spring이란?")
                 .answer("java Application 환경 제공, java bean 개발 환경 제공, bean 간의 관계를 정의하며 DI를 제공하는 프레임워크")
@@ -103,7 +108,7 @@ class QuestionControllerTest {
                 .build();
 
         //stub
-        BDDMockito.given(questionService.getQuestion(questionId)).willReturn(question);
+        BDDMockito.given(questionService.getQuestion(questionId)).willReturn(data);
 
         //when
         mockMvc.perform(MockMvcRequestBuilders.get("/questions/{questionId}", questionId)
@@ -124,7 +129,7 @@ class QuestionControllerTest {
         Long interviewId = 1L;
         Long questionId = 1L;
 
-        QuestionReqDTO editQuestion = QuestionReqDTO.builder()
+        QuestionRequest editQuestion = QuestionRequest.builder()
                 .question("spring boot란?")
                 .answer("java Application 환경 제공, java bean 개발 환경 제공, bean 간의 관계를 정의하며 DI를 제공하는 프레임워크, tomcat 내장")
                 .interviewId(interviewId)
@@ -149,16 +154,41 @@ class QuestionControllerTest {
         Long questionId1 = 1L;
         Long questionId2 = 2L;
 
-        List<QuestionDTO> responseList = new ArrayList<>();
+        Interview interview = Interview.builder()
+                .id(interviewId)
+                .interviewName("백엔드 개발자 면접 준비")
+                .description("java 개발자 준비")
+                .build();
 
-        QuestionDTO response1 = QuestionDTO.builder()
+
+        List<Question> requestList = new ArrayList<>();
+        List<QuestionResponse> responseList = new ArrayList<>();
+
+        Question req1 = Question.builder()
+                .id(questionId1)
+                .question("spring boot란?")
+                .answer("java Application 환경 제공, java bean 개발 환경 제공, bean 간의 관계를 정의하며 DI를 제공하는 프레임워크, tomcat 내장")
+                .interview(interview)
+                .build();
+
+        Question req2 = Question.builder()
+                .id(questionId2)
+                .question("spring이란?")
+                .answer("java Application 환경 제공, java bean 개발 환경 제공, bean 간의 관계를 정의하며 DI를 제공하는 프레임워크")
+                .interview(interview)
+                .build();
+
+        requestList.add(req1);
+        requestList.add(req2);
+
+        QuestionResponse response1 = QuestionResponse.builder()
                 .id(questionId1)
                 .question("spring boot란?")
                 .answer("java Application 환경 제공, java bean 개발 환경 제공, bean 간의 관계를 정의하며 DI를 제공하는 프레임워크, tomcat 내장")
                 .interviewId(interviewId)
                 .build();
 
-        QuestionDTO response2 = QuestionDTO.builder()
+        QuestionResponse response2 = QuestionResponse.builder()
                 .id(questionId2)
                 .question("spring이란?")
                 .answer("java Application 환경 제공, java bean 개발 환경 제공, bean 간의 관계를 정의하며 DI를 제공하는 프레임워크")
@@ -169,7 +199,7 @@ class QuestionControllerTest {
         responseList.add(response2);
 
         //stub
-        BDDMockito.given(questionService.getQuestionList()).willReturn(responseList);
+        BDDMockito.given(questionService.getQuestionList()).willReturn(requestList);
 
         //when
         mockMvc.perform(MockMvcRequestBuilders.get("/questions")

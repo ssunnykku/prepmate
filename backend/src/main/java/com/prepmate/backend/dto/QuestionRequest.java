@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class QuestionReqDTO {
+public class QuestionRequest {
     @Size(max = 600)
     @NotBlank
     private String question;

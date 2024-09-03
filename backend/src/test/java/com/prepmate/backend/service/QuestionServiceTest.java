@@ -3,14 +3,16 @@ package com.prepmate.backend.service;
 import com.prepmate.backend.domain.Interview;
 import com.prepmate.backend.domain.Question;
 import com.prepmate.backend.domain.User;
-import com.prepmate.backend.dto.QuestionDTO;
-import com.prepmate.backend.dto.QuestionReqDTO;
+import com.prepmate.backend.dto.QuestionRequest;
 import com.prepmate.backend.repository.InterviewRepository;
 import com.prepmate.backend.repository.QuestionRepository;
 import com.prepmate.backend.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -82,7 +84,7 @@ class QuestionServiceTest {
     void addQuestionTest() {
         // given
         Question question = question();
-        QuestionReqDTO questionReqDTO = QuestionReqDTO.builder()
+        QuestionRequest questionReqDTO = QuestionRequest.builder()
                 .question(question.getQuestion())
                 .answer(question.getAnswer())
                 .interviewId(question.getInterview().getId())
@@ -105,7 +107,7 @@ class QuestionServiceTest {
     void addQuestion_exceptionTest() {
 
         // given
-        QuestionReqDTO question = QuestionReqDTO.builder()
+        QuestionRequest question = QuestionRequest.builder()
                 .question("spring이란?")
                 .answer("java Application 환경 제공, java bean 개발 환경 제공, bean 간의 관계를 정의하며 DI를 제공하는 프레임워크")
                 .interviewId(1L)
@@ -126,7 +128,7 @@ class QuestionServiceTest {
         questionRepository.save(question);
 
         // when
-        QuestionDTO data = questionService.getQuestion(question.getId());
+        Question data = questionService.getQuestion(question.getId());
 
         // then
         assertThat(data.getQuestion()).isEqualTo(question.getQuestion());
@@ -148,7 +150,7 @@ class QuestionServiceTest {
         Question question = question();
         questionRepository.save(question);
 
-        QuestionReqDTO editData = QuestionReqDTO.builder()
+        QuestionRequest editData = QuestionRequest.builder()
                 .question("spring boot란?")
                 .answer("java Application 환경 제공, java bean 개발 환경 제공, bean 간의 관계를 정의하며 DI를 제공하는 프레임워크, 엄청 편합니다. tomcat을 내장")
                 .build();
@@ -174,7 +176,7 @@ class QuestionServiceTest {
         }
 
         // when
-        List<QuestionDTO> list = questionService.getQuestionList();
+        List<Question> list = questionService.getQuestionList();
 
         // then
         assertThat(list.size()).isEqualTo(10);

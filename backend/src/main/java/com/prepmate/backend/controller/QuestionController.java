@@ -1,7 +1,8 @@
 package com.prepmate.backend.controller;
 
-import com.prepmate.backend.dto.QuestionDTO;
-import com.prepmate.backend.dto.QuestionReqDTO;
+import com.prepmate.backend.domain.Question;
+import com.prepmate.backend.dto.QuestionResponse;
+import com.prepmate.backend.dto.QuestionRequest;
 import com.prepmate.backend.service.QuestionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -25,7 +27,7 @@ public class QuestionController {
      * @return 요청 결과 반환 (성공시 "success")
      */
     @PostMapping
-    public ResponseEntity<String> addQuestion(@Valid @RequestBody QuestionReqDTO questionReqDTO) {
+    public ResponseEntity<String> addQuestion(@Valid @RequestBody QuestionRequest questionReqDTO) {
         questionService.addQuestion(questionReqDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body("success");
     }
@@ -36,8 +38,16 @@ public class QuestionController {
      * @return QuestionDTO
      */
     @GetMapping("/{questionId}")
-    public ResponseEntity<QuestionDTO> getQuestion(@PathVariable Long questionId) {
-        return ResponseEntity.status(HttpStatus.OK).body(questionService.getQuestion(questionId));
+    public ResponseEntity<QuestionResponse> getQuestion(@PathVariable Long questionId) {
+        Question data = questionService.getQuestion(questionId);
+
+        QuestionResponse question = QuestionResponse.builder()
+                .id(data.getId())
+                .question(data.getQuestion())
+                .answer(data.getAnswer())
+                .createdAt(data.getCreatedAt())
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(question);
     }
 
     /**
@@ -47,7 +57,7 @@ public class QuestionController {
      * @return 요청 결과 반환 (성공시 "success")
      */
     @PutMapping("/{questionId}")
-    public ResponseEntity<String> setQuestion(@PathVariable Long questionId, @Valid @RequestBody QuestionReqDTO questionReqDTO) {
+    public ResponseEntity<String> setQuestion(@PathVariable Long questionId, @Valid @RequestBody QuestionRequest questionReqDTO) {
         questionService.setQuestion(questionId,questionReqDTO);
         return ResponseEntity.status(HttpStatus.OK).body("success");
     }
@@ -57,8 +67,20 @@ public class QuestionController {
      * @return QuestionDTO 리스트 반환
      */
     @GetMapping
-    public ResponseEntity<List<QuestionDTO>> getQuestionList() {
-        return ResponseEntity.status(HttpStatus.OK).body(questionService.getQuestionList());
+    public ResponseEntity<List<QuestionResponse>> getQuestionList() {
+        List<Question> getQuestions = questionService.getQuestionList();
+        List<QuestionResponse> result = new ArrayList<>();
+
+        for (Question question: getQuestions) {
+            result.add(QuestionResponse.builder()
+                    .id(question.getId())
+                    .question(question.getQuestion())
+                    .answer(question.getAnswer())
+                    .createdAt(question.getCreatedAt())
+                    .interviewId(question.getInterview().getId())
+                    .build());
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     /**

@@ -23,10 +23,6 @@ import java.util.List;
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Interview {
-    public void update(String interviewName, String description) {
-        this.interviewName = interviewName;
-        this.description = description;
-    }
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "interview_id", nullable = false)
@@ -53,4 +49,9 @@ public class Interview {
     @OneToMany(mappedBy = "interview")
     @Builder.Default
     List<Question> questions = new ArrayList<>();
+
+    public void update(String interviewName, String description) {
+        this.interviewName = interviewName;
+        this.description = description;
+    }
 }

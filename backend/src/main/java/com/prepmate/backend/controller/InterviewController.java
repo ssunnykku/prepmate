@@ -1,7 +1,8 @@
 package com.prepmate.backend.controller;
 
-import com.prepmate.backend.dto.InterviewDTO;
-import com.prepmate.backend.dto.InterviewReqDTO;
+import com.prepmate.backend.domain.Interview;
+import com.prepmate.backend.dto.InterviewResponse;
+import com.prepmate.backend.dto.InterviewRequest;
 import com.prepmate.backend.service.InterviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -25,7 +27,7 @@ public class InterviewController {
      * @return 요청 결과 반환 (성공시 "success")
      */
     @PostMapping
-    public ResponseEntity<String> addInterview(@Valid @RequestBody InterviewReqDTO interviewReqDTO) {
+    public ResponseEntity<String> addInterview(@Valid @RequestBody InterviewRequest interviewReqDTO) {
         interviewService.addInterview(interviewReqDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body("success");
     }
@@ -37,7 +39,7 @@ public class InterviewController {
      * @return 요청 결과 반환 (성공시 "success")
      */
     @PutMapping("/{interviewId}")
-    public ResponseEntity<String> setInterview(@PathVariable Long interviewId, @Valid @RequestBody InterviewReqDTO interviewReqDTO) {
+    public ResponseEntity<String> setInterview(@PathVariable Long interviewId, @Valid @RequestBody InterviewRequest interviewReqDTO) {
         interviewService.setInterview(interviewId,interviewReqDTO);
         return ResponseEntity.status(HttpStatus.OK).body("success");    }
 
@@ -56,8 +58,19 @@ public class InterviewController {
      * @return InterviewDTO 리스트 반환
      */
     @GetMapping
-    public ResponseEntity<List<InterviewDTO>> getInterviewList() {
-        return ResponseEntity.status(HttpStatus.OK).body(interviewService.getInterviewList());
+    public ResponseEntity<List<InterviewResponse>> getInterviewList() {
+        List<InterviewResponse> result = new ArrayList<>();
+        List<Interview> getinterviews = interviewService.getInterviewList();
+
+        for(Interview interview: getinterviews) {
+            result.add(InterviewResponse.builder()
+                    .id(interview.getId())
+                    .interviewName(interview.getInterviewName())
+                    .description(interview.getDescription())
+                    .createdAt(interview.getCreatedAt())
+                    .build());
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     }

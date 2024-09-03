@@ -6,15 +6,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class QuestionDTO {
+public class InterviewResponse {
     private Long id;
-    private String question;
-    private String answer;
+    private String interviewName;
+    private String description;
     private LocalDateTime createdAt;
-    private Long interviewId;
+    private UserDTO user;
+    List<QuestionResponse> questions = new ArrayList<>();
+
 }

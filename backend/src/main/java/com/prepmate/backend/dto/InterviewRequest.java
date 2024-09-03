@@ -13,7 +13,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class InterviewReqDTO {
+public class InterviewRequest {
     @Size(max = 200)
     @NotBlank
     private String interviewName;

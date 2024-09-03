@@ -1,17 +1,14 @@
 package com.prepmate.backend.service;
 
 import com.prepmate.backend.domain.Interview;
-import com.prepmate.backend.domain.Question;
 import com.prepmate.backend.domain.User;
-import com.prepmate.backend.dto.InterviewDTO;
-import com.prepmate.backend.dto.InterviewReqDTO;
+import com.prepmate.backend.dto.InterviewRequest;
 import com.prepmate.backend.repository.InterviewRepository;
 import com.prepmate.backend.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,7 +21,7 @@ public class InterviewService {
      * 인터뷰 추가
      * @param interviewReqDTO 인터뷰 추가시 입력 정보 (interviewName, description, userId)
      */
-    public void addInterview(InterviewReqDTO interviewReqDTO) {
+    public void addInterview(InterviewRequest interviewReqDTO) {
         User user = userRepository.findByUserId(interviewReqDTO.getUserId());
 
         interviewRepository.save(Interview.builder()
@@ -39,7 +36,7 @@ public class InterviewService {
      * @param interviewId
      * @param interviewReqDTO
      */
-    public void setInterview(Long interviewId, InterviewReqDTO interviewReqDTO) {
+    public void setInterview(Long interviewId, InterviewRequest interviewReqDTO) {
         Interview data = interviewRepository.findById(interviewId)
                 .orElseThrow(() -> new EntityNotFoundException("Interview not found with id: " + interviewId));
 
@@ -60,18 +57,8 @@ public class InterviewService {
      * 인터뷰 리스트
      * @return InterviewDTO 리스트 반환
      */
-    public List<InterviewDTO> getInterviewList(){
-        List<Interview> dataList = interviewRepository.findAll();
-        List<InterviewDTO> result = new ArrayList<>();
-        for(Interview interview: dataList) {
-            result.add(InterviewDTO.builder()
-                            .id(interview.getId())
-                            .interviewName(interview.getInterviewName())
-                            .description(interview.getDescription())
-                            .createdAt(interview.getCreatedAt())
-                    .build());
-        }
-        return result;
+    public List<Interview> getInterviewList(){
+        return interviewRepository.findAll();
     }
 
 }
