@@ -3,6 +3,7 @@ package com.prepmate.backend.controller;
 import com.prepmate.backend.domain.Question;
 import com.prepmate.backend.dto.QuestionResponse;
 import com.prepmate.backend.dto.QuestionRequest;
+import com.prepmate.backend.service.InterviewQuestionService;
 import com.prepmate.backend.service.QuestionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,20 +21,23 @@ import java.util.List;
 @Slf4j
 public class QuestionController {
     private final QuestionService questionService;
+    private final InterviewQuestionService interviewQuestionService;
 
     /**
      * 문제 추가
-     * @param questionReqDTO 문제 추가시 입력 내용(question, answer)
+     *
+     * @param questionRequest 문제 추가시 입력 내용(question, answer)
      * @return 요청 결과 반환 (성공시 "success")
      */
     @PostMapping
-    public ResponseEntity<String> addQuestion(@Valid @RequestBody QuestionRequest questionReqDTO) {
-        questionService.addQuestion(questionReqDTO);
+    public ResponseEntity<String> addQuestion(@Valid @RequestBody QuestionRequest questionRequest) {
+        questionService.addQuestion(questionRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body("success");
     }
 
     /**
      * 문제 조회
+     *
      * @param questionId
      * @return QuestionDTO
      */
@@ -52,18 +56,20 @@ public class QuestionController {
 
     /**
      * 문제 수정
+     *
      * @param questionId
      * @param questionReqDTO
      * @return 요청 결과 반환 (성공시 "success")
      */
     @PutMapping("/{questionId}")
     public ResponseEntity<String> setQuestion(@PathVariable Long questionId, @Valid @RequestBody QuestionRequest questionReqDTO) {
-        questionService.setQuestion(questionId,questionReqDTO);
+        questionService.setQuestion(questionId, questionReqDTO);
         return ResponseEntity.status(HttpStatus.OK).body("success");
     }
 
     /**
      * 문제 리스트 전체 조회 -> 특정 인터뷰에 대한 리스트 조회로 수정 필요
+     *
      * @return QuestionDTO 리스트 반환
      */
     @GetMapping
@@ -71,7 +77,7 @@ public class QuestionController {
         List<Question> getQuestions = questionService.getQuestionList();
         List<QuestionResponse> result = new ArrayList<>();
 
-        for (Question question: getQuestions) {
+        for (Question question : getQuestions) {
             result.add(QuestionResponse.builder()
                     .id(question.getId())
                     .question(question.getQuestion())
@@ -85,6 +91,7 @@ public class QuestionController {
 
     /**
      * 문제 삭제
+     *
      * @param questionId
      * @return 요청 결과 반환 (성공시 "success")
      */

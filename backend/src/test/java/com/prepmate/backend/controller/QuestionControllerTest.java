@@ -96,7 +96,7 @@ class QuestionControllerTest {
                 .id(questionId)
                 .question("spring이란?")
                 .answer("java Application 환경 제공, java bean 개발 환경 제공, bean 간의 관계를 정의하며 DI를 제공하는 프레임워크")
-                .createdAt(LocalDateTime.parse("2024-08-15 13:47:13.248",formatter))
+                .createdAt(LocalDateTime.parse("2024-08-15 13:47:13.248", formatter))
                 .build();
 
         QuestionResponse question = QuestionResponse.builder()
@@ -104,7 +104,7 @@ class QuestionControllerTest {
                 .question("spring이란?")
                 .answer("java Application 환경 제공, java bean 개발 환경 제공, bean 간의 관계를 정의하며 DI를 제공하는 프레임워크")
                 .interviewId(interviewId)
-                .createdAt(LocalDateTime.parse("2024-08-15 13:47:13.248",formatter))
+                .createdAt(LocalDateTime.parse("2024-08-15 13:47:13.248", formatter))
                 .build();
 
         //stub
@@ -124,7 +124,7 @@ class QuestionControllerTest {
     }
 
     @Test
-    void setQuestion() throws Exception{
+    void setQuestion() throws Exception {
         //given
         Long interviewId = 1L;
         Long questionId = 1L;
@@ -231,4 +231,6 @@ class QuestionControllerTest {
         //then
         BDDMockito.verify(questionService).removeQuestion(questionId);
     }
+
+
 }
