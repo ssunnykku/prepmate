@@ -14,7 +14,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "interviews")
-@Data
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -43,12 +43,9 @@ public class Interview {
     @NotNull
     private User user;
 
-    @OneToMany(mappedBy = "interview")
-    @Builder.Default
-    List<Question> questions = new ArrayList<>();
-
     public void update(String interviewName, String description) {
         this.interviewName = interviewName;
         this.description = description;
     }
+
 }

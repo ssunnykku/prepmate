@@ -42,7 +42,7 @@ class QuestionRepositoryTest {
                         .interviewName("백엔드 개발자 면접 연습1")
                         .description("백엔드 개발자 면접 연습(java)")
                         .user(user)
-                .build();
+                        .build();
         interviewRepository.save(interview);
 
         Question question = Question.builder()
@@ -86,8 +86,7 @@ class QuestionRepositoryTest {
         Optional<Question> result = questionRepository.findById(question.getId());
 
         result.ifPresent(data -> {
-            data.setQuestion("spring boot란?");
-            data.setAnswer("java Application 환경 제공, java bean 개발 환경 제공, bean 간의 관계를 정의하며 DI를 제공하는 프레임워크, 엄청 편합니다. tomcat을 내장");
+            data.update("spring boot란?", "java Application 환경 제공, java bean 개발 환경 제공, bean 간의 관계를 정의하며 DI를 제공하는 프레임워크, 엄청 편합니다. tomcat을 내장");
 
             assertThat(data.getQuestion()).contains("boot");
             assertThat(data.getAnswer()).contains("tomcat");
@@ -119,5 +118,6 @@ class QuestionRepositoryTest {
             assertThat(a.getAnswer()).isEqualTo(question1.getAnswer());
         });
     }
+
 
 }

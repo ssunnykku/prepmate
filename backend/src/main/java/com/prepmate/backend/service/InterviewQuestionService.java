@@ -19,7 +19,6 @@ public class InterviewQuestionService {
      */
     public List<Question> getQuestionList(Long interviewId) {
         List<Question> questions = interviewQuestionRepository.findByInterviewId(interviewId);
-
         return questions;
     }
 }

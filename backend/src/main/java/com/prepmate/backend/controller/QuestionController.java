@@ -21,7 +21,6 @@ import java.util.List;
 @Slf4j
 public class QuestionController {
     private final QuestionService questionService;
-    private final InterviewQuestionService interviewQuestionService;
 
     /**
      * 문제 추가

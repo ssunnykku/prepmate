@@ -40,7 +40,7 @@ class QuestionServiceTest {
     @Autowired
     InterviewRepository interviewRepository;
 
-     private User user;
+    private User user;
 
     @BeforeEach
     void beforeEach() {
@@ -54,7 +54,7 @@ class QuestionServiceTest {
     }
 
     @AfterEach
-    void afterEach(){
+    void afterEach() {
         questionRepository.deleteAll();
         interviewRepository.deleteAll();
         userRepository.deleteAll();
@@ -114,7 +114,7 @@ class QuestionServiceTest {
                 .build();
 
         // then
-        assertThatThrownBy(()->questionService.addQuestion(question))
+        assertThatThrownBy(() -> questionService.addQuestion(question))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("Interview not found with id: " + question.getInterviewId());
     }
@@ -159,7 +159,7 @@ class QuestionServiceTest {
         // then
         Optional<Question> getData = questionRepository.findById(question.getId());
 
-        getData.ifPresent((data)->{
+        getData.ifPresent((data) -> {
             assertThat(data.getQuestion()).contains("boot");
             assertThat(data.getAnswer()).contains("tomcat");
         });
