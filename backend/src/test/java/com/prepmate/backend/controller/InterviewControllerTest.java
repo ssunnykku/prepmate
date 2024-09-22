@@ -1,8 +1,9 @@
 package com.prepmate.backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.prepmate.backend.dto.InterviewDTO;
-import com.prepmate.backend.dto.InterviewReqDTO;
+import com.prepmate.backend.domain.Interview;
+import com.prepmate.backend.dto.InterviewResponse;
+import com.prepmate.backend.dto.InterviewRequest;
 import com.prepmate.backend.service.InterviewService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,7 +50,7 @@ class InterviewControllerTest {
     @Test
     void addInterview() throws Exception {
         UUID userId = UUID.fromString("aa815892-d059-4efe-81b8-58dd20a34a96");
-        InterviewReqDTO interview = InterviewReqDTO.builder()
+        InterviewRequest interview = InterviewRequest.builder()
                 .interviewName("백엔드 개발자 면접 준비")
                 .description("java 개발자 준비")
                 .userId(userId)
@@ -68,7 +69,7 @@ class InterviewControllerTest {
         UUID userId = UUID.fromString("aa815892-d059-4efe-81b8-58dd20a34a96");
         Long interviewId = 1L;
 
-        InterviewReqDTO interview = InterviewReqDTO.builder()
+        InterviewRequest interview = InterviewRequest.builder()
                 .interviewName("백엔드 개발자 면접 준비")
                 .description("java 개발자 준비")
                 .userId(userId)
@@ -105,15 +106,32 @@ class InterviewControllerTest {
         Long interviewId1 = 1L;
         Long interviewId2 = 2L;
 
-        List<InterviewDTO> responseList = new ArrayList<>();
+        List<Interview> requestList = new ArrayList<>();
+        List<InterviewResponse> responseList = new ArrayList<>();
 
-        InterviewDTO response1 = InterviewDTO.builder()
+        Interview req1 = Interview.builder()
                 .id(interviewId1)
                 .interviewName("백엔드 개발자 면접 준비")
                 .description("java 개발자 준비")
                 .build();
 
-        InterviewDTO response2 = InterviewDTO.builder()
+        Interview req2 = Interview.builder()
+                .id(interviewId2)
+                .interviewName("영어 공부")
+                .description("영어 공부")
+                .build();
+
+        requestList.add(req1);
+        requestList.add(req2);
+
+
+        InterviewResponse response1 = InterviewResponse.builder()
+                .id(interviewId1)
+                .interviewName("백엔드 개발자 면접 준비")
+                .description("java 개발자 준비")
+                .build();
+
+        InterviewResponse response2 = InterviewResponse.builder()
                 .id(interviewId2)
                 .interviewName("영어 공부")
                 .description("영어 공부")
@@ -123,7 +141,7 @@ class InterviewControllerTest {
         responseList.add(response2);
 
         //stub
-        BDDMockito.given(interviewService.getInterviewList()).willReturn(responseList);
+        BDDMockito.given(interviewService.getInterviewList()).willReturn(requestList);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/interviews")
                         .contentType(MediaType.APPLICATION_JSON)

@@ -13,19 +13,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="categories")
+@Table(name = "interviews")
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Interview {
-    public void update(String interviewName, String description) {
-        this.interviewName = interviewName;
-        this.description = description;
-    }
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "interview_id", nullable = false)
     private Long id;
 
@@ -46,5 +42,10 @@ public class Interview {
     @JoinColumn(name = "user_id")
     @NotNull
     private User user;
+
+    public void update(String interviewName, String description) {
+        this.interviewName = interviewName;
+        this.description = description;
+    }
 
 }

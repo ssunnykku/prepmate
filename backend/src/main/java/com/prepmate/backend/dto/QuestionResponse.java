@@ -6,17 +6,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class InterviewDTO {
+public class QuestionResponse {
     private Long id;
-    private String interviewName;
-    private String description;
+    private String question;
+    private String answer;
     private LocalDateTime createdAt;
-    private UserDTO user;
+    private Long interviewId;
 }

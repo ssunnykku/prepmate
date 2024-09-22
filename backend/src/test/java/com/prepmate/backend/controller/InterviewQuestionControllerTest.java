@@ -73,7 +73,7 @@ class InterviewQuestionControllerTest {
         BDDMockito.given(interviewQuestionService.getQuestionList(interviewId)).willReturn(responseList);
 
         //when
-        mockMvc.perform(MockMvcRequestBuilders.get("/questions?interviewId=" + interviewId)
+        mockMvc.perform(MockMvcRequestBuilders.get("/interviews/" + interviewId + "/questions")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(responseList))
                 )

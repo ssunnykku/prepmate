@@ -1,5 +1,6 @@
 src/main/resources/application.properties
 src/main/resources/application-test.properties
+src/main/resources/application-dev.properties
 .idea
 
 HELP.md
