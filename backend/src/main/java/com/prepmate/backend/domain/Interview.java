@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="categories")
+@Table(name = "interviews")
 @Data
 @Builder
 @NoArgsConstructor
@@ -24,7 +24,7 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 public class Interview {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "interview_id", nullable = false)
     private Long id;
 
