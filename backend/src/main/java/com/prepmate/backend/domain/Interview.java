@@ -4,10 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -17,20 +14,25 @@ import java.util.List;
 
 @Entity
 @Table(name="categories")
-@Data
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class Category {
+public class Interview {
+    public void update(String interviewName, String description) {
+        this.interviewName = interviewName;
+        this.description = description;
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "category_id", nullable = false)
+    @Column(name = "interview_id", nullable = false)
     private Long id;
 
-    @Column(name = "category_name", nullable = false)
+    @Column(name = "interview_name", nullable = false)
     @Size(max = 200)
-    private String categoryName;
+    @NotBlank
+    private String interviewName;
 
     @Column(name = "description", nullable = false)
     @Size(max = 600)
@@ -45,7 +47,4 @@ public class Category {
     @NotNull
     private User user;
 
-    @OneToMany(mappedBy = "category")
-    @Builder.Default
-    List<Question> questions = new ArrayList<>();
 }

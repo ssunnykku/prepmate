@@ -1,7 +1,9 @@
 package com.prepmate.backend.repository;
 
-import com.prepmate.backend.domain.Category;
+import com.prepmate.backend.domain.Interview;
 import com.prepmate.backend.domain.Question;
+import com.prepmate.backend.domain.User;
+import com.prepmate.backend.dto.QuestionDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +23,33 @@ class QuestionRepositoryTest {
     @Autowired
     QuestionRepository questionRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    InterviewRepository interviewRepository;
+
     @Test
     @Transactional
     void enrollTest() {
+        User user = User.builder()
+                .email("sun@gmail.com")
+                .name("김선희")
+                .password("1234").build();
+        userRepository.save(user);
+
+        Interview interview =
+                Interview.builder()
+                        .interviewName("백엔드 개발자 면접 연습1")
+                        .description("백엔드 개발자 면접 연습(java)")
+                        .user(user)
+                .build();
+        interviewRepository.save(interview);
+
         Question question = Question.builder()
                 .question("spring이란?")
                 .answer("java Application 환경 제공, java bean 개발 환경 제공, bean 간의 관계를 정의하며 DI를 제공하는 프레임워크")
+                .interview(interview)
                 .build();
         questionRepository.save(question);
 
@@ -35,6 +58,7 @@ class QuestionRepositoryTest {
         result.ifPresent(data -> {
             assertThat(data.getQuestion()).isEqualTo(question.getQuestion());
             assertThat(data.getAnswer()).isEqualTo(question.getAnswer());
+            assertThat(data.getInterview()).isEqualTo(interview);
         });
 
     }
@@ -63,8 +87,7 @@ class QuestionRepositoryTest {
         Optional<Question> result = questionRepository.findById(question.getId());
 
         result.ifPresent(data -> {
-            data.setQuestion("spring boot란?");
-            data.setAnswer("java Application 환경 제공, java bean 개발 환경 제공, bean 간의 관계를 정의하며 DI를 제공하는 프레임워크, 엄청 편합니다. tomcat을 내장");
+            data.update("spring boot란?","java Application 환경 제공, java bean 개발 환경 제공, bean 간의 관계를 정의하며 DI를 제공하는 프레임워크, 엄청 편합니다. tomcat을 내장");
 
             assertThat(data.getQuestion()).contains("boot");
             assertThat(data.getAnswer()).contains("tomcat");
@@ -97,4 +120,5 @@ class QuestionRepositoryTest {
         });
     }
 
-}
+
+    }
