@@ -262,3 +262,5 @@ gradle-app.setting
 # End of https://www.toptal.com/developers/gitignore/api/java,intellij,macos,gradle,visualstudiocode,yarn,react
 
 src/main/resources/application-dev.properties
+
+frontend/frontend.iml
