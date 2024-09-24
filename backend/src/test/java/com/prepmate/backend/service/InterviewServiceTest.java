@@ -8,6 +8,7 @@ import com.prepmate.backend.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -78,7 +79,7 @@ class InterviewServiceTest {
         interviewService.setInterview(interview.getId(), editInterview);
 
         // then
-        interviewRepository.findById(interview.getId()).ifPresent((data)->{
+        interviewRepository.findById(interview.getId()).ifPresent((data) -> {
             assertThat(data.getInterviewName()).isEqualTo(editInterview.getInterviewName());
             assertThat(data.getDescription()).isEqualTo(editInterview.getDescription());
 
@@ -114,6 +115,9 @@ class InterviewServiceTest {
     @Test
     @Transactional
     void getInterviewList() {
+        int page = 0;
+        int size = 10;
+
         // given
         User user = User.builder()
                 .email("sun@gmail.com")
@@ -137,9 +141,10 @@ class InterviewServiceTest {
         interviewRepository.save(interview2);
 
         // when
-        List<Interview> interviewList= interviewService.getInterviewList();
+        Page<Interview> interviewList = interviewService.getInterviewList(page, size);
 
         // then
-        assertThat(interviewList.size()).isEqualTo(2);
+        assertThat(interviewList.getTotalElements()).isEqualTo(2);
+
     }
 }

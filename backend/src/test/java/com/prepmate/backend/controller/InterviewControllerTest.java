@@ -14,11 +14,13 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +50,7 @@ class InterviewControllerTest {
     }
 
     @Test
+    @Transactional
     void addInterview() throws Exception {
         UUID userId = UUID.fromString("aa815892-d059-4efe-81b8-58dd20a34a96");
         InterviewRequest interview = InterviewRequest.builder()
@@ -65,6 +68,7 @@ class InterviewControllerTest {
     }
 
     @Test
+    @Transactional
     void setInterview() throws Exception {
         UUID userId = UUID.fromString("aa815892-d059-4efe-81b8-58dd20a34a96");
         Long interviewId = 1L;
@@ -87,6 +91,7 @@ class InterviewControllerTest {
     }
 
     @Test
+    @Transactional
     void removeInterview() throws Exception {
         Long interviewId = 1L;
 
@@ -106,6 +111,9 @@ class InterviewControllerTest {
         Long interviewId1 = 1L;
         Long interviewId2 = 2L;
 
+        int page = 0;
+        int size = 10;
+
         List<Interview> requestList = new ArrayList<>();
         List<InterviewResponse> responseList = new ArrayList<>();
 
@@ -124,6 +132,8 @@ class InterviewControllerTest {
         requestList.add(req1);
         requestList.add(req2);
 
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Interview> pageResult = new PageImpl<Interview>(requestList, pageable, 2);
 
         InterviewResponse response1 = InterviewResponse.builder()
                 .id(interviewId1)
@@ -141,7 +151,7 @@ class InterviewControllerTest {
         responseList.add(response2);
 
         //stub
-        BDDMockito.given(interviewService.getInterviewList()).willReturn(requestList);
+        BDDMockito.given(interviewService.getInterviewList(page, size)).willReturn(pageResult);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/interviews")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -149,7 +159,7 @@ class InterviewControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(print());
 
-        BDDMockito.verify(interviewService).getInterviewList();
+        BDDMockito.verify(interviewService).getInterviewList(page, size);
 
     }
 }
