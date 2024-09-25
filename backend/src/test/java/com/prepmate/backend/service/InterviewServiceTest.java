@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
+@ActiveProfiles("test")
 class InterviewServiceTest {
 
     @Autowired
@@ -141,10 +143,10 @@ class InterviewServiceTest {
         interviewRepository.save(interview2);
 
         // when
-        Page<Interview> interviewList = interviewService.getInterviewList(page, size);
+        List<Interview> interviewList = interviewService.getInterviewList(page);
 
         // then
-        assertThat(interviewList.getTotalElements()).isEqualTo(2);
+        assertThat(interviewList.size()).isEqualTo(2);
 
     }
 }

@@ -65,22 +65,12 @@ public class InterviewController {
      * @return InterviewDTO 리스트 반환
      */
     @GetMapping
-    public ResponseEntity<List<InterviewResponse>> getInterviewList(@RequestParam(defaultValue = "1") int page,
-                                                                    @RequestParam(defaultValue = "10") int size) {
+    public ResponseEntity<List<Interview>> getInterviewList(@RequestParam(defaultValue = "1") Integer page) {
 
-        Page<Interview> getInterviews = interviewService.getInterviewList(Math.max(page - 1, 0), size);
-        List<InterviewResponse> result = new ArrayList<>();
+//        Page<Interview> getInterviews = interviewService.getInterviewList(page);
+        List<Interview> getInterviews = interviewService.getInterviewList(page);
 
-        for (Interview interview : getInterviews) {
-            result.add(InterviewResponse.builder()
-                    .id(interview.getId())
-                    .interviewName(interview.getInterviewName())
-                    .description(interview.getDescription())
-                    .createdAt(interview.getCreatedAt())
-                    .build());
-        }
-
-        return ResponseEntity.status(HttpStatus.OK).body(result);
+        return ResponseEntity.status(HttpStatus.OK).body(getInterviews);
     }
 
 }

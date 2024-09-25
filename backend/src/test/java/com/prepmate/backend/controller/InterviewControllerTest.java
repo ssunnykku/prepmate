@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -31,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
 @Slf4j
 class InterviewControllerTest {
 
@@ -111,7 +113,7 @@ class InterviewControllerTest {
         Long interviewId1 = 1L;
         Long interviewId2 = 2L;
 
-        int page = 0;
+        int page = 1;
         int size = 10;
 
         List<Interview> requestList = new ArrayList<>();
@@ -133,7 +135,7 @@ class InterviewControllerTest {
         requestList.add(req2);
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<Interview> pageResult = new PageImpl<Interview>(requestList, pageable, 2);
+//        List<Interview> pageResult = new PageImpl<Interview>(requestList, pageable, 2);
 
         InterviewResponse response1 = InterviewResponse.builder()
                 .id(interviewId1)
@@ -151,7 +153,7 @@ class InterviewControllerTest {
         responseList.add(response2);
 
         //stub
-        BDDMockito.given(interviewService.getInterviewList(page, size)).willReturn(pageResult);
+        BDDMockito.given(interviewService.getInterviewList(page)).willReturn(requestList);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/interviews")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -159,7 +161,7 @@ class InterviewControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(print());
 
-        BDDMockito.verify(interviewService).getInterviewList(page, size);
+        BDDMockito.verify(interviewService).getInterviewList(page);
 
     }
 }

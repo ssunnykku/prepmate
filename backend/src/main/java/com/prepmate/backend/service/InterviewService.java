@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class InterviewService {
     private final InterviewRepository interviewRepository;
@@ -67,9 +68,12 @@ public class InterviewService {
      *
      * @return InterviewDTO 리스트 반환
      */
-    public Page<Interview> getInterviewList(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-        return interviewRepository.findAll(pageable);
+
+    @Transactional(readOnly = true)
+    public List<Interview> getInterviewList(Integer page) {
+        int pageNo = page < 1 ? 0 : page - 1;
+        Pageable pageable = PageRequest.of(pageNo, 10, Sort.by(Sort.Direction.DESC, "id"));
+        return interviewRepository.findAll(pageable).getContent();
     }
 
 }
