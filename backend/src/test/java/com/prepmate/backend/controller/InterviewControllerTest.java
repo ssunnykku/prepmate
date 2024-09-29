@@ -3,10 +3,7 @@ package com.prepmate.backend.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prepmate.backend.domain.Interview;
 import com.prepmate.backend.domain.User;
-import com.prepmate.backend.dto.InterviewDTO;
-import com.prepmate.backend.dto.InterviewResponse;
-import com.prepmate.backend.dto.InterviewRequest;
-import com.prepmate.backend.dto.InterviewsDTO;
+import com.prepmate.backend.dto.*;
 import com.prepmate.backend.service.InterviewService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -150,7 +147,7 @@ class InterviewControllerTest {
                 ));
 
         //stub
-        BDDMockito.given(interviewService.getInterviewList(page)).willReturn(new InterviewsDTO(pageResult));
+        BDDMockito.given(interviewService.getInterviewList(page)).willReturn(new PagenationDTO(pageResult));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/interviews")
                         .contentType(MediaType.APPLICATION_JSON)

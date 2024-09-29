@@ -3,8 +3,8 @@ package com.prepmate.backend.service;
 import com.prepmate.backend.domain.Interview;
 import com.prepmate.backend.domain.User;
 import com.prepmate.backend.dto.InterviewDTO;
-import com.prepmate.backend.dto.InterviewsDTO;
 import com.prepmate.backend.dto.InterviewRequest;
+import com.prepmate.backend.dto.PagenationDTO;
 import com.prepmate.backend.repository.InterviewRepository;
 import com.prepmate.backend.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -15,8 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Transactional
@@ -72,7 +70,7 @@ public class InterviewService {
      */
 
     @Transactional(readOnly = true)
-    public InterviewsDTO getInterviewList(Integer page) {
+    public PagenationDTO<InterviewDTO> getInterviewList(Integer page) {
         int pageNo = page < 1 ? 0 : page - 1;
         Pageable pageable = PageRequest.of(pageNo, 10, Sort.by(Sort.Direction.DESC, "id"));
         Page<InterviewDTO> interviewPage = interviewRepository.findAll(pageable).map(interview -> new InterviewDTO(
@@ -81,7 +79,7 @@ public class InterviewService {
                 interview.getDescription(),
                 interview.getCreatedAt(),
                 interview.getUser().getUserId()));
-        return new InterviewsDTO(interviewPage);
+        return new PagenationDTO(interviewPage);
     }
 
 }

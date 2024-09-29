@@ -2,17 +2,14 @@ package com.prepmate.backend.service;
 
 import com.prepmate.backend.domain.Interview;
 import com.prepmate.backend.domain.User;
+import com.prepmate.backend.dto.InterviewDTO;
 import com.prepmate.backend.dto.InterviewRequest;
-import com.prepmate.backend.dto.InterviewsDTO;
+import com.prepmate.backend.dto.PagenationDTO;
 import com.prepmate.backend.repository.InterviewRepository;
 import com.prepmate.backend.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -147,7 +144,7 @@ class InterviewServiceTest {
         interviewRepository.save(interview2);
 
         // when
-        InterviewsDTO interviewList = interviewService.getInterviewList(page);
+        PagenationDTO<InterviewDTO> interviewList = interviewService.getInterviewList(page);
 
         // then
         assertThat(interviewList.getTotalElements()).isEqualTo(2);

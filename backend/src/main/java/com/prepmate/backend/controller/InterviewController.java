@@ -1,8 +1,6 @@
 package com.prepmate.backend.controller;
 
-import com.prepmate.backend.dto.InterviewResponse;
-import com.prepmate.backend.dto.InterviewRequest;
-import com.prepmate.backend.dto.InterviewsDTO;
+import com.prepmate.backend.dto.*;
 import com.prepmate.backend.service.InterviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -65,9 +61,8 @@ public class InterviewController {
      */
     @GetMapping
     @Transactional(readOnly = true)
-    public ResponseEntity<InterviewsDTO> getInterviewList(@RequestParam(defaultValue = "1") Integer page) {
-
-        InterviewsDTO getInterviews = interviewService.getInterviewList(page);
+    public ResponseEntity<PagenationDTO<InterviewDTO>> getInterviewList(@RequestParam(defaultValue = "1") Integer page) {
+        PagenationDTO<InterviewDTO> getInterviews = interviewService.getInterviewList(page);
 
         return ResponseEntity.status(HttpStatus.OK).body(getInterviews);
     }
