@@ -36,6 +36,7 @@ public class Interview {
     private String description;
 
     @CreatedDate
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @ManyToOne

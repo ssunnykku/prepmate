@@ -5,11 +5,12 @@ import com.prepmate.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 @Component
 @RequiredArgsConstructor
+@Profile("local")
 @Slf4j
 public class DataInitializer implements CommandLineRunner {
     private final UserRepository userRepository;

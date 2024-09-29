@@ -38,10 +38,11 @@ public class Question {
     private String answer;
 
     @CreatedDate
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "interview")
+    @JoinColumn(name = "interview_id")
     private Interview interview;
 
 }

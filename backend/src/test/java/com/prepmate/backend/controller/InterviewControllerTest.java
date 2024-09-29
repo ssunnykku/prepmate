@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prepmate.backend.domain.Interview;
 import com.prepmate.backend.dto.InterviewResponse;
 import com.prepmate.backend.dto.InterviewRequest;
+import com.prepmate.backend.dto.InterviewsDTO;
 import com.prepmate.backend.service.InterviewService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -135,25 +136,10 @@ class InterviewControllerTest {
         requestList.add(req2);
 
         Pageable pageable = PageRequest.of(page, size);
-//        List<Interview> pageResult = new PageImpl<Interview>(requestList, pageable, 2);
-
-        InterviewResponse response1 = InterviewResponse.builder()
-                .id(interviewId1)
-                .interviewName("백엔드 개발자 면접 준비")
-                .description("java 개발자 준비")
-                .build();
-
-        InterviewResponse response2 = InterviewResponse.builder()
-                .id(interviewId2)
-                .interviewName("영어 공부")
-                .description("영어 공부")
-                .build();
-
-        responseList.add(response1);
-        responseList.add(response2);
+        Page<Interview> pageResult = new PageImpl<Interview>(requestList, pageable, requestList.size());
 
         //stub
-        BDDMockito.given(interviewService.getInterviewList(page)).willReturn(requestList);
+        BDDMockito.given(interviewService.getInterviewList(page)).willReturn(new InterviewsDTO(pageResult));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/interviews")
                         .contentType(MediaType.APPLICATION_JSON)

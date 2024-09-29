@@ -25,22 +25,23 @@ public class User {
     private UUID userId;
 
     @Column(name = "name", nullable = false)
-    @Size(max = 50)
+    @Size(max = 100)
     @NotBlank
     private String name;
 
     @Column(name = "email", nullable = false)
-    @Size(max = 50)
+    @Size(max = 100)
     @NotBlank
     @Email
     private String email;
 
     @Column(name = "password", nullable = false)
-    @Size(max = 50)
+    @Size(max = 100)
     @NotBlank
     private String password;
 
     @CreatedDate
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
 }
