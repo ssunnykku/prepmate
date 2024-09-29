@@ -2,6 +2,7 @@ package com.prepmate.backend.service;
 
 import com.prepmate.backend.domain.Interview;
 import com.prepmate.backend.domain.User;
+import com.prepmate.backend.dto.InterviewDTO;
 import com.prepmate.backend.dto.InterviewsDTO;
 import com.prepmate.backend.dto.InterviewRequest;
 import com.prepmate.backend.repository.InterviewRepository;
@@ -74,7 +75,12 @@ public class InterviewService {
     public InterviewsDTO getInterviewList(Integer page) {
         int pageNo = page < 1 ? 0 : page - 1;
         Pageable pageable = PageRequest.of(pageNo, 10, Sort.by(Sort.Direction.DESC, "id"));
-        Page<Interview> interviewPage = interviewRepository.findAll(pageable);
+        Page<InterviewDTO> interviewPage = interviewRepository.findAll(pageable).map(interview -> new InterviewDTO(
+                interview.getId(),
+                interview.getInterviewName(),
+                interview.getDescription(),
+                interview.getCreatedAt(),
+                interview.getUser().getUserId()));
         return new InterviewsDTO(interviewPage);
     }
 

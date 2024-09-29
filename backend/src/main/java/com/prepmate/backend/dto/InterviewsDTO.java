@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 public class InterviewsDTO {
-    private List<Interview> data;
+    private List<InterviewDTO> data;
     private long totalElements;
     private int totalPages;
     private int currentPage;
@@ -25,7 +25,7 @@ public class InterviewsDTO {
     private boolean hasNext;
     private boolean hasPrevious;
 
-    public InterviewsDTO(Page<Interview> interviewPage) {
+    public InterviewsDTO(Page<InterviewDTO> interviewPage) {
         this.setData(interviewPage.getContent());
         this.setTotalElements(interviewPage.getTotalElements());
         this.setTotalPages(interviewPage.getTotalPages());

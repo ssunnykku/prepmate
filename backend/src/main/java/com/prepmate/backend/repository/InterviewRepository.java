@@ -1,6 +1,7 @@
 package com.prepmate.backend.repository;
 
 import com.prepmate.backend.domain.Interview;
+import com.prepmate.backend.dto.InterviewDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.domain.Pageable;

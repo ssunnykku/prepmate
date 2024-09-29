@@ -2,6 +2,8 @@ package com.prepmate.backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prepmate.backend.domain.Interview;
+import com.prepmate.backend.domain.User;
+import com.prepmate.backend.dto.InterviewDTO;
 import com.prepmate.backend.dto.InterviewResponse;
 import com.prepmate.backend.dto.InterviewRequest;
 import com.prepmate.backend.dto.InterviewsDTO;
@@ -124,19 +126,28 @@ class InterviewControllerTest {
                 .id(interviewId1)
                 .interviewName("백엔드 개발자 면접 준비")
                 .description("java 개발자 준비")
+                .user(User.builder().userId(UUID.fromString("28eadf23-dc55-49d7-8398-d5e215f177fd")).build())
                 .build();
 
         Interview req2 = Interview.builder()
                 .id(interviewId2)
                 .interviewName("영어 공부")
                 .description("영어 공부")
+                .user(User.builder().userId(UUID.fromString("28eadf23-dc55-49d7-8398-d5e215f177fd")).build())
                 .build();
 
         requestList.add(req1);
         requestList.add(req2);
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<Interview> pageResult = new PageImpl<Interview>(requestList, pageable, requestList.size());
+        Page<InterviewDTO> pageResult = new PageImpl<Interview>(requestList, pageable, requestList.size())
+                .map(interview -> new InterviewDTO(
+                        interview.getId(),
+                        interview.getInterviewName(),
+                        interview.getDescription(),
+                        interview.getCreatedAt(),
+                        interview.getUser().getUserId()
+                ));
 
         //stub
         BDDMockito.given(interviewService.getInterviewList(page)).willReturn(new InterviewsDTO(pageResult));
