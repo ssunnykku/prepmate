@@ -2,12 +2,15 @@ package com.prepmate.backend.service;
 
 import com.prepmate.backend.domain.Interview;
 import com.prepmate.backend.domain.User;
+import com.prepmate.backend.dto.InterviewDTO;
 import com.prepmate.backend.dto.InterviewRequest;
+import com.prepmate.backend.dto.PagenationDTO;
 import com.prepmate.backend.repository.InterviewRepository;
 import com.prepmate.backend.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -15,6 +18,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
+@ActiveProfiles("test")
 class InterviewServiceTest {
 
     @Autowired
@@ -78,7 +82,7 @@ class InterviewServiceTest {
         interviewService.setInterview(interview.getId(), editInterview);
 
         // then
-        interviewRepository.findById(interview.getId()).ifPresent((data)->{
+        interviewRepository.findById(interview.getId()).ifPresent((data) -> {
             assertThat(data.getInterviewName()).isEqualTo(editInterview.getInterviewName());
             assertThat(data.getDescription()).isEqualTo(editInterview.getDescription());
 
@@ -114,6 +118,9 @@ class InterviewServiceTest {
     @Test
     @Transactional
     void getInterviewList() {
+        int page = 0;
+        int size = 10;
+
         // given
         User user = User.builder()
                 .email("sun@gmail.com")
@@ -137,9 +144,10 @@ class InterviewServiceTest {
         interviewRepository.save(interview2);
 
         // when
-        List<Interview> interviewList= interviewService.getInterviewList();
+        PagenationDTO<InterviewDTO> interviewList = interviewService.getInterviewList(page);
 
         // then
-        assertThat(interviewList.size()).isEqualTo(2);
+        assertThat(interviewList.getTotalElements()).isEqualTo(2);
+
     }
 }

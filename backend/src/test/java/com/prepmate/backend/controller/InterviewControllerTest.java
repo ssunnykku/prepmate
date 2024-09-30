@@ -2,8 +2,8 @@ package com.prepmate.backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prepmate.backend.domain.Interview;
-import com.prepmate.backend.dto.InterviewResponse;
-import com.prepmate.backend.dto.InterviewRequest;
+import com.prepmate.backend.domain.User;
+import com.prepmate.backend.dto.*;
 import com.prepmate.backend.service.InterviewService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,13 +14,17 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
 @Slf4j
 class InterviewControllerTest {
 
@@ -48,6 +53,7 @@ class InterviewControllerTest {
     }
 
     @Test
+    @Transactional
     void addInterview() throws Exception {
         UUID userId = UUID.fromString("aa815892-d059-4efe-81b8-58dd20a34a96");
         InterviewRequest interview = InterviewRequest.builder()
@@ -65,6 +71,7 @@ class InterviewControllerTest {
     }
 
     @Test
+    @Transactional
     void setInterview() throws Exception {
         UUID userId = UUID.fromString("aa815892-d059-4efe-81b8-58dd20a34a96");
         Long interviewId = 1L;
@@ -87,6 +94,7 @@ class InterviewControllerTest {
     }
 
     @Test
+    @Transactional
     void removeInterview() throws Exception {
         Long interviewId = 1L;
 
@@ -106,50 +114,49 @@ class InterviewControllerTest {
         Long interviewId1 = 1L;
         Long interviewId2 = 2L;
 
-        List<Interview> requestList = new ArrayList<>();
-        List<InterviewResponse> responseList = new ArrayList<>();
+        int page = 0;
+        int size = 10;
 
         Interview req1 = Interview.builder()
                 .id(interviewId1)
                 .interviewName("백엔드 개발자 면접 준비")
                 .description("java 개발자 준비")
+                .user(User.builder().userId(UUID.fromString("28eadf23-dc55-49d7-8398-d5e215f177fd")).build())
                 .build();
 
         Interview req2 = Interview.builder()
                 .id(interviewId2)
                 .interviewName("영어 공부")
                 .description("영어 공부")
+                .user(User.builder().userId(UUID.fromString("28eadf23-dc55-49d7-8398-d5e215f177fd")).build())
                 .build();
 
-        requestList.add(req1);
-        requestList.add(req2);
+        List<Interview> requestList = Arrays.asList(req1, req2);
 
 
-        InterviewResponse response1 = InterviewResponse.builder()
-                .id(interviewId1)
-                .interviewName("백엔드 개발자 면접 준비")
-                .description("java 개발자 준비")
-                .build();
-
-        InterviewResponse response2 = InterviewResponse.builder()
-                .id(interviewId2)
-                .interviewName("영어 공부")
-                .description("영어 공부")
-                .build();
-
-        responseList.add(response1);
-        responseList.add(response2);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+        Page<InterviewDTO> pageResult = new PageImpl<Interview>(requestList, pageable, requestList.size())
+                .map(interview -> new InterviewDTO(
+                        interview.getId(),
+                        interview.getInterviewName(),
+                        interview.getDescription(),
+                        interview.getCreatedAt(),
+                        interview.getUser().getUserId()
+                ));
 
         //stub
-        BDDMockito.given(interviewService.getInterviewList()).willReturn(requestList);
+        BDDMockito.given(interviewService.getInterviewList(page)).willReturn(new PagenationDTO(pageResult));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/interviews")
+        mockMvc.perform(MockMvcRequestBuilders.get("/interviews?page=" + page)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.totalElements").value(2))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.totalPages").value(1))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.currentPage").value(1))
                 .andDo(print());
 
-        BDDMockito.verify(interviewService).getInterviewList();
+        BDDMockito.verify(interviewService).getInterviewList(page);
 
     }
 }

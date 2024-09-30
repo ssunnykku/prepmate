@@ -9,12 +9,10 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 @Getter
 @Builder
 @NoArgsConstructor
@@ -27,22 +25,23 @@ public class User {
     private UUID userId;
 
     @Column(name = "name", nullable = false)
-    @Size(max = 50)
+    @Size(max = 100)
     @NotBlank
     private String name;
 
     @Column(name = "email", nullable = false)
-    @Size(max = 50)
+    @Size(max = 100)
     @NotBlank
     @Email
     private String email;
 
     @Column(name = "password", nullable = false)
-    @Size(max = 50)
+    @Size(max = 100)
     @NotBlank
     private String password;
 
     @CreatedDate
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
 }

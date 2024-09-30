@@ -1,0 +1,17 @@
+INSERT INTO interviews (interview_id, interview_name, description, created_at, user_id)
+VALUES (1, 'Technical Interview', 'Technical interview for software engineering', NOW(),
+        '28eadf23-dc55-49d7-8398-d5e215f177fd'),
+       (2, 'HR Interview', 'HR round for cultural fit', NOW(), '28eadf23-dc55-49d7-8398-d5e215f177fd'),
+       (3, 'Managerial Round', 'Interview with project manager', NOW(), '28eadf23-dc55-49d7-8398-d5e215f177fd'),
+       (4, 'Behavioral Interview', 'Behavioral interview round', NOW(), '28eadf23-dc55-49d7-8398-d5e215f177fd'),
+       (5, 'Initial Screening', 'Initial phone screening round', NOW(), '28eadf23-dc55-49d7-8398-d5e215f177fd'),
+       (6, 'Coding Test', 'Online coding test', NOW(), '28eadf23-dc55-49d7-8398-d5e215f177fd'),
+       (7, 'System Design Interview', 'System design round for senior engineers', NOW(),
+        '28eadf23-dc55-49d7-8398-d5e215f177fd'),
+       (8, 'Final Interview', 'Final interview round', NOW(), '28eadf23-dc55-49d7-8398-d5e215f177fd'),
+       (9, 'Panel Interview', 'Interview with multiple interviewers', NOW(), '28eadf23-dc55-49d7-8398-d5e215f177fd'),
+       (10, 'Product Management Interview', 'Interview for product management role', NOW(),
+        '28eadf23-dc55-49d7-8398-d5e215f177fd'),
+       (11, 'Data Science Interview', 'Data science interview for machine learning position', NOW(),
+        '28eadf23-dc55-49d7-8398-d5e215f177fd'),
+       (12, 'UX Design Interview', 'Interview for UX design position', NOW(), '28eadf23-dc55-49d7-8398-d5e215f177fd');

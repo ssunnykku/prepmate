@@ -1,8 +1,7 @@
 package com.prepmate.backend.controller;
 
-import com.prepmate.backend.domain.Question;
-
-import com.prepmate.backend.dto.QuestionResponse;
+import com.prepmate.backend.dto.PagenationDTO;
+import com.prepmate.backend.dto.QuestionDTO;
 import com.prepmate.backend.service.InterviewQuestionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,20 +29,9 @@ public class InterviewQuestionController {
      * @return QuestionResponse 리스트 반환
      */
     @GetMapping("/{interviewId}/questions")
-    public ResponseEntity<List<QuestionResponse>> getQuestionList(@PathVariable Long interviewId) {
-        List<Question> questions = interviewQuestionService.getQuestionList(interviewId);
-        List<QuestionResponse> result = new ArrayList<>();
-
-        for (Question question : questions) {
-            result.add(QuestionResponse.builder()
-                    .id(question.getId())
-                    .question(question.getQuestion())
-                    .answer(question.getAnswer())
-                    .createdAt(question.getCreatedAt())
-                    .interviewId(question.getInterview().getId())
-                    .build());
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(result);
+    public ResponseEntity<PagenationDTO<QuestionDTO>> getQuestionList(@PathVariable Long interviewId, @RequestParam(defaultValue = "1") Integer page) {
+        PagenationDTO<QuestionDTO> questions = interviewQuestionService.getQuestionList(interviewId, page);
+        return ResponseEntity.status(HttpStatus.OK).body(questions);
     }
 
 }

@@ -13,6 +13,7 @@ class UserRepositoryTest {
 
     @Autowired
     private UserRepository userRepository;
+
     @Test
     @Transactional
     void findByUserId() {
@@ -31,5 +32,19 @@ class UserRepositoryTest {
         assertThat(data.getEmail()).isEqualTo(user.getEmail());
         assertThat(data.getName()).isEqualTo(user.getName());
         assertThat(data.getPassword()).isEqualTo(user.getPassword());
+    }
+
+    @Test
+    @Transactional
+    void userTest() {
+        User user = User.builder()
+                .email("sun@gmail.com")
+                .name("김선희")
+                .password("1234").build();
+        userRepository.save(user);
+
+        User findUser = userRepository.findByName("김선희");
+
+        assertThat(findUser.getUserId()).isEqualTo(user.getUserId());
     }
 }
