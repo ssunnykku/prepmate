@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class InterviewService {
     private final InterviewRepository interviewRepository;
     private final UserRepository userRepository;
+    private final int pageSize = 10;
 
     /**
      * 인터뷰 추가
@@ -72,13 +73,14 @@ public class InterviewService {
     @Transactional(readOnly = true)
     public PagenationDTO<InterviewDTO> getInterviewList(Integer page) {
         int pageNo = page < 1 ? 0 : page - 1;
-        Pageable pageable = PageRequest.of(pageNo, 10, Sort.by(Sort.Direction.DESC, "id"));
-        Page<InterviewDTO> interviewPage = interviewRepository.findAll(pageable).map(interview -> new InterviewDTO(
-                interview.getId(),
-                interview.getInterviewName(),
-                interview.getDescription(),
-                interview.getCreatedAt(),
-                interview.getUser().getUserId()));
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.DESC, "id"));
+        Page<InterviewDTO> interviewPage = interviewRepository.findAll(pageable)
+                .map(interview -> new InterviewDTO(
+                        interview.getId(),
+                        interview.getInterviewName(),
+                        interview.getDescription(),
+                        interview.getCreatedAt(),
+                        interview.getUser().getUserId()));
         return new PagenationDTO(interviewPage);
     }
 

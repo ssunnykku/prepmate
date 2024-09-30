@@ -17,11 +17,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Question {
-    public void update(String question, String answer) {
-        this.question = question;
-        this.answer = answer;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "question_id", nullable = false)
@@ -44,5 +39,10 @@ public class Question {
     @ManyToOne
     @JoinColumn(name = "interview_id")
     private Interview interview;
+
+    public void update(String question, String answer) {
+        this.question = question;
+        this.answer = answer;
+    }
 
 }

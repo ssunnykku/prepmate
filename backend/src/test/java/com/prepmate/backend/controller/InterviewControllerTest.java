@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -113,11 +114,8 @@ class InterviewControllerTest {
         Long interviewId1 = 1L;
         Long interviewId2 = 2L;
 
-        int page = 1;
+        int page = 0;
         int size = 10;
-
-        List<Interview> requestList = new ArrayList<>();
-        List<InterviewResponse> responseList = new ArrayList<>();
 
         Interview req1 = Interview.builder()
                 .id(interviewId1)
@@ -133,10 +131,10 @@ class InterviewControllerTest {
                 .user(User.builder().userId(UUID.fromString("28eadf23-dc55-49d7-8398-d5e215f177fd")).build())
                 .build();
 
-        requestList.add(req1);
-        requestList.add(req2);
+        List<Interview> requestList = Arrays.asList(req1, req2);
 
-        Pageable pageable = PageRequest.of(page, size);
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
         Page<InterviewDTO> pageResult = new PageImpl<Interview>(requestList, pageable, requestList.size())
                 .map(interview -> new InterviewDTO(
                         interview.getId(),
@@ -149,10 +147,13 @@ class InterviewControllerTest {
         //stub
         BDDMockito.given(interviewService.getInterviewList(page)).willReturn(new PagenationDTO(pageResult));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/interviews")
+        mockMvc.perform(MockMvcRequestBuilders.get("/interviews?page=" + page)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.totalElements").value(2))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.totalPages").value(1))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.currentPage").value(1))
                 .andDo(print());
 
         BDDMockito.verify(interviewService).getInterviewList(page);
